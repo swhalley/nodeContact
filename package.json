@@ -1,0 +1,10 @@
+{
+    "name": "nodeContact",
+    "description": "Simple Contact Book to Teach myself Node.js",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "express": "3.4.5",
+        "jasmine-node": "1.11.0"
+    }
+}

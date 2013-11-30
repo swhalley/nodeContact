@@ -6,17 +6,22 @@
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script type="text/javascript">
         $(function() {
-
+            $('#buttonClick').click( function(){
+                var value = $('#nameSearch').val();
+                $.get('data', { Name : value}, function(data) {
+                    $('#contacts').html(data);
+                });
+            });
         });
     </script>
 
 </head>
 
 <body>
-    <label for="nameSearch" />
+    <label for="nameSearch">Sean By Name</label>
     <input type="text" id="nameSearch" />
-    <button id="click" />
-    <hr />
+    <button id="buttonClick" >Search</button>
+
 
     <div id="contacts"></div>
 

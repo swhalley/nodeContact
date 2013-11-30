@@ -1,36 +1,39 @@
 var http = require('http');
 var url = require('url');
+var express = require('express');
+var config = require('./config')();
 
-var server = http.createServer(function(request, response) {
 
-    request.addListener('end', function() { //figure out all the events. End requires me to call resume() at the bottom, but what are the others. there is a 'data' and 'connection' i have seen
+var app = express();
+app.use(express.static(__dirname + '/public'));
 
-        var parts = url.parse(request.url, true);
-        var name = parts.query.Name;
+app.get('/', function(request, response) {
+    console.log('main Index Page');
+    response.sendFile('index.html');
+});
 
-        if(!name) {
-            response.writeHead(200, {
-                'Content-Type' : 'text/plain'
-            });
+app.get('/data', function(request, response) {
+    console.log('data request');
 
-            response.write('Usage :: Pass the parameter Name');
-            response.end();
-        }
+    var parts = url.parse(request.url, true);
+    var name = parts.query.Name;
 
-        var filteredContacts = contacts.filter(function(item) {
-            return (item.Name.toLowerCase().indexOf(name.toLowerCase()) != -1);
-        });
+    if(!name) {
+        var error = { isError : true };
+        response.send(JSON.stringify(error));
+        return;
+    }
 
-        response.writeHead(200, {
-            'Content-Type' : 'application/json'
-        });
-
-        response.write(JSON.stringify(filteredContacts));
-        response.end();
+    var filteredContacts = contacts.filter(function(item) {
+        return (item.Name.toLowerCase().indexOf(name.toLowerCase()) != -1);
     });
 
-    request.resume();
-}).listen(8000);
+    response.send(JSON.stringify(filteredContacts));
+});
+
+app.listen(config.port);
+
+
 
 
 
