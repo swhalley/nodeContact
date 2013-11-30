@@ -1,30 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
 <head>
     <title>Simple Contact Page</title>
 
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>
+
     <script type="text/javascript">
-        $(function() {
-            $('#buttonClick').click( function(){
+        function contactCtrl($scope) {
+            $scope.contactList = [];
+
+            $scope.searchContact = function() {
                 var value = $('#nameSearch').val();
-                $.get('data', { Name : value}, function(data) {
-                    $('#contacts').html(data);
+
+                $.getJSON('data', { Name : value}, function(data) {
+                    $scope.$apply(function() {
+                        $scope.contactList = data;
+                    });
                 });
-            });
-        });
+            }
+        }
     </script>
 
 </head>
 
-<body>
-    <label for="nameSearch">Sean By Name</label>
-    <input type="text" id="nameSearch" />
-    <button id="buttonClick" >Search</button>
+<body ng-controller="contactCtrl">
 
+    <div class="form-group">
+        <label for="nameSearch">Name</label>
+        <input type="text" id="nameSearch" placeholder="Enter Name"/>
+        <button ng-click="searchContact()" class="btn">Search</button>
+    </div>
 
-    <div id="contacts"></div>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Address</th>
+                <th>City</th>
+            </tr>
+        </thead>
 
+        <tbody>
+            <tr ng-repeat="contact in contactList">
+                <td>{{contact.Name}}</td>
+                <td>{{contact.Age}}</td>
+                <td>{{contact.Address.StreetAddress}}</td>
+                <td>{{contact.Address.City}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+
+        <code>{{contactList}}</code>
+    </div>
 </body>
 
 </html>

@@ -15,6 +15,11 @@ app.get('/', function(request, response) {
 app.get('/data', function(request, response) {
     console.log('data request');
 
+    response.type('application/json');
+    response.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    response.set('Pragma', 'no-cache');
+    response.set('Expires', '0');
+
     var parts = url.parse(request.url, true);
     var name = parts.query.Name;
 
